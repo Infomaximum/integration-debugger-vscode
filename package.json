@@ -1,0 +1,91 @@
+{
+  "name": "integration-debugger",
+  "displayName": "integration-debugger",
+  "description": "",
+  "publisher": "Jokerok",
+  "license": "Apache-2.0",
+  "version": "0.2.0",
+  "engines": {
+    "vscode": "^1.97.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:typescript"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Block Debugger",
+      "properties": {
+        "integration-debugger.isEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Ручная активация расширения"
+        },
+        "integration-debugger.debugConfigurationName": {
+          "type": "string",
+          "description": "Имя конфигурации которая будет запущена для отладки (из файла .vscode/launch.json)"
+        },
+        "integration-debugger.functionNames": {
+          "type": "object",
+          "description": "Список имен функции которые можно запустить для отладки",
+          "properties": {
+            "single": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "series": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "webpack --mode production --devtool hidden-source-map",
+    "package": "vsce package",
+    "package:ci": "vsce package --out ext.vsix",
+    "watch": "webpack --watch",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "lint": "eslint src",
+    "test": "vscode-test",
+    "release": "standard-version"
+  },
+  "devDependencies": {
+    "@infomaximum/integration-sdk": "^1.4.1",
+    "@types/babel__traverse": "^7.20.6",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.97.0",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.21.0",
+    "standard-version": "^9.5.0",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.7.3",
+    "vsce": "^2.15.0",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.26.10",
+    "@babel/traverse": "^7.26.10",
+    "@babel/types": "^7.26.10"
+  },
+  "repository": {
+    "url": "https://github.com/Infomaximum/integration-debugger-vscode"
+  }
+}
