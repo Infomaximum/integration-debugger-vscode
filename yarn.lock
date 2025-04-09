@@ -178,10 +178,10 @@
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
-"@infomaximum/integration-sdk@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@infomaximum/integration-sdk/-/integration-sdk-1.4.1.tgz#9009da9ce1ad5242487934c7a853d455da050422"
-  integrity sha512-GjwZk3F3UkhNx4fuaXss9R/o1Y5Hv5uun6BkuiPbgOvhvgAfthMdKB+inN0dCrhiQI5aS/u7p/8uxbVFUhTcvw==
+"@infomaximum/integration-sdk@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@infomaximum/integration-sdk/-/integration-sdk-2.3.0.tgz#8f82257d2e132d1be93e9cb4300fb0e2495b0baf"
+  integrity sha512-NHVf4mxukfxlwIdPHE/Wns3n2NkPcvdaU0aEsAC9195nNh8BZCtCq4GQWsm8ZEZRf68FThSw8zBEDmUdHmpYKQ==
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"

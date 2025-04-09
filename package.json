@@ -63,7 +63,7 @@
     "release": "standard-version"
   },
   "devDependencies": {
-    "@infomaximum/integration-sdk": "^1.4.1",
+    "@infomaximum/integration-sdk": "^2.3.0",
     "@types/babel__traverse": "^7.20.6",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",

@@ -55,6 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
         const finalConfig = mergeArgs(debugConfig, {
           series: !params.series ? undefined : true,
           entityKey: params.entityKey,
+          isGenerateSchema: params.isGenerateSchema ? true : undefined,
         } satisfies Debugging.DebugIntegrationOptions);
 
         vscode.debug.startDebugging(undefined, finalConfig);

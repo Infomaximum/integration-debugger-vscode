@@ -63,7 +63,7 @@ export class EntityDebugCodeLensProvider implements vscode.CodeLensProvider {
 
     codeLenses.push(
       new vscode.CodeLens(range, {
-        title: `$(debug-alt) Debug "${entityKey}"`,
+        title: `$(debug-alt) Debug`,
         tooltip: `Perform a single debug run of the "${entityKey}" block`,
         command: this.runDebugCommandName,
         arguments: [params],
@@ -73,10 +73,21 @@ export class EntityDebugCodeLensProvider implements vscode.CodeLensProvider {
     if (isSeries) {
       codeLenses.push(
         new vscode.CodeLens(range, {
-          title: `$(debug-alt) Debug series "${entityKey}"`,
+          title: `$(debug-alt) Debug series`,
           tooltip: `Perform a series of debugging operations on the "${entityKey}" block`,
           command: this.runDebugCommandName,
           arguments: [{ ...params, series: true } satisfies DebugParams],
+        })
+      );
+
+      codeLenses.push(
+        new vscode.CodeLens(range, {
+          title: `$(lightbulb) Generate schema`,
+          tooltip: `Generate a scheme based on the output data of block "${entityKey}"`,
+          command: this.runDebugCommandName,
+          arguments: [
+            { ...params, isGenerateSchema: true } satisfies DebugParams,
+          ],
         })
       );
     }
