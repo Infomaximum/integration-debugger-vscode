@@ -5,9 +5,11 @@ import { Debugging } from "@infomaximum/integration-sdk";
 import {
   isArrowFunctionExpression,
   isFunctionExpression,
+  isIdentifier,
   type Identifier,
   type ObjectMethod,
   type ObjectProperty,
+  type VariableDeclarator,
 } from "@babel/types";
 import * as vscode from "vscode";
 
@@ -31,7 +33,7 @@ export class EntityDebugCodeLensProvider implements vscode.CodeLensProvider {
   }
 
   public provideCodeLenses(
-    document: vscode.TextDocument
+    document: vscode.TextDocument,
   ): vscode.ProviderResult<vscode.CodeLens[]> {
     const functionNames =
       this.config.get<FunctionNamesConfig>("functionNames")!;
@@ -41,7 +43,7 @@ export class EntityDebugCodeLensProvider implements vscode.CodeLensProvider {
 
   private getCodeLenses(
     path: NodePath<ObjectMethod | ObjectProperty>,
-    isSeries: boolean
+    isSeries: boolean,
   ) {
     const codeLenses: vscode.CodeLens[] = [];
     const entityKey = this.findEntityKey(path);
@@ -67,7 +69,7 @@ export class EntityDebugCodeLensProvider implements vscode.CodeLensProvider {
         tooltip: `Perform a single debug run of the "${entityKey}" block`,
         command: this.runDebugCommandName,
         arguments: [params],
-      })
+      }),
     );
 
     if (isSeries) {
@@ -77,7 +79,7 @@ export class EntityDebugCodeLensProvider implements vscode.CodeLensProvider {
           tooltip: `Perform a series of debugging operations on the "${entityKey}" block`,
           command: this.runDebugCommandName,
           arguments: [{ ...params, series: true } satisfies DebugParams],
-        })
+        }),
       );
 
       codeLenses.push(
@@ -88,7 +90,7 @@ export class EntityDebugCodeLensProvider implements vscode.CodeLensProvider {
           arguments: [
             { ...params, isGenerateSchema: true } satisfies DebugParams,
           ],
-        })
+        }),
       );
     }
 
@@ -97,7 +99,7 @@ export class EntityDebugCodeLensProvider implements vscode.CodeLensProvider {
 
   private findDebugEntities(
     document: vscode.TextDocument,
-    functionNames: FunctionNamesConfig
+    functionNames: FunctionNamesConfig,
   ): vscode.CodeLens[] {
     const codeLenses: vscode.CodeLens[] = [];
     const text = document.getText();
@@ -154,28 +156,25 @@ export class EntityDebugCodeLensProvider implements vscode.CodeLensProvider {
   }
 
   private findEntityKey(
-    path: NodePath<ObjectProperty | ObjectMethod>
+    path: NodePath<ObjectProperty | ObjectMethod>,
   ): string | null {
-    let parent = path.parentPath as NodePath<Node> | null;
+    const objectExpr = path.findParent((p) => p.isObjectExpression());
+    if (!objectExpr) {
+      return null;
+    }
 
-    while (parent) {
-      if (parent.isObjectExpression()) {
-        const metaProp = parent.node.properties.find(
-          (p: any) => p.key?.name === "meta"
-        );
+    const variableDeclarator = objectExpr.findParent((p) =>
+      p.isVariableDeclarator(),
+    ) as NodePath<VariableDeclarator> | null;
 
-        if (metaProp) {
-          const keyProp = (metaProp as any)?.value?.properties?.find(
-            (p: any) => p.key?.name === "key"
-          );
+    if (!variableDeclarator) {
+      return null;
+    }
 
-          if (keyProp?.value?.value) {
-            return keyProp.value.value;
-          }
-        }
-      }
+    const id = variableDeclarator.node.id;
 
-      parent = parent.parentPath;
+    if (isIdentifier(id)) {
+      return id.name;
     }
 
     return null;
